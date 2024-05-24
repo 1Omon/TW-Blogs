@@ -1,0 +1,117 @@
+#Functional Requirements
+General
+1. Sign up and sign in
+2. Delete account
+3. Email verification
+
+Author
+1. Post Blog
+2. Delete Blog
+3. Edit Blog 
+4. Sharing & liking blogs
+5. Receive payments for content
+
+Consumer
+1. Read blogs
+2. Set preference (e.g: Based on type of blog, etc)
+3. Save blogs in feed
+
+Admin
+1. Get all blogs with pending status
+2. Delete some blog posts
+3. Manage the authors and users
+
+Community
+1. Each author should have followers and a forum
+
+#Non-functional Requirements
+1. Security (Authentication and authorization)
+2. Availability
+
+
+## Client-server architecture
+
+#Clients
+They are able to make requests
+They expect to get responses for the requests
+
+Server is acting between you the client and the Database
+The database is help you save, edit, delete, etc. your data 
+By data, we mean files, images, text-based, etc.
+
+Database: SQL and NoSQL
+
+SQL: 
+MySql, Postgresql, SQL server
+
+NoSQl:
+-> MongoDB, 
+DynamoDB, etc.
+
+Server
+Acting as the middleman between the client (you/browser) and 
+the database(SQL/NoSQL)
+
+-> Node + Express.js, 
+Python + (Django/Flask/FastAPi/etc.), 
+Java + (Springboot/Spring framework), 
+Ruby on Rails
+
+
+Request Methods
+- GET
+- POST
+- PUT/PATCH
+- DELETE
+- HEADERS
+
+Request Sections: headers, body, file, params
+
+PUT returns a new data resource after operation or updates existing one
+Patch returns an updated version of the version
+Get is for retrieving data resources
+Post for create (new) data resources
+Delete is for deleting or removing data resources
+
+# Responses
+  Status Codes
+     100
+     200 (201 - newly created with post, 200/204 - success messages)
+     300
+     400 (400 - Bad request, 404 - Not found)
+     500 (500 - internal errors in the server)
+
+CDN - content delivery network
+
+Node Package Manager (npmjs.org/packages)
+   morgan - for logging requests on a defined file
+   bcrypt - encryption
+   dotenv - save secret keys and passcodes for third-party services
+   mongoose - connect our application to the database
+   express - to create our server and some routes
+   multer - for file uploads
+   cors - defining where to accepts requests
+   helmet - ensuring secured transactions
+   jsonwebtoken - for tokenization and detokenization 
+   nodemailer - working with emails
+   body-parser - determines the type of req.body (like json, xml, etc)
+   socket.io - real time communication purposes 
+
+Folder Structuring
+|--utils 
+|--configuration 
+|--models
+|--controllers 
+|--routes 
+|--index.js 
+|--package.json 
+|--package-lock.json 
+|--node-modules
+
+Express.js 
+- framework for creating servers with javascript
+- Router()
+
+
+Async functions
+ - step-by-step flow of operation
