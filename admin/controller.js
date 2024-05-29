@@ -1,4 +1,6 @@
 import Blog from "../Blog/model.js";
+import User from "../user/model.js"
+
 
 module.exports.getAllPosts = async (req, res, next) => {
     try {
