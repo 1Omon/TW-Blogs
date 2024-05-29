@@ -1,16 +1,24 @@
 import mongoose from  "mongoose";
 
 const AdsSchema = new mongoose.Schema({
-    image: String,
+    image: {
+        type: String,
+        required: false
+    },
     content: {
         type: String,
         required: true
     },
     publisher: {
-        type: mongoose.Schema.Types.Objectid.AdsSchema,
-        ref: 'Admin'
+        type: mongoose.Schema.Types.Objectid,
+        ref: 'Admin',
+        required: true
     },
-    redirectionLink: String
+
+    redirectionLink: {
+        type: String ,
+        required: false
+    },
 })
 
 const Ads = mongoose.model('Ads', AdsSchema)

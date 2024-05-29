@@ -22,6 +22,10 @@ const UserSchema = new mongoose.Schema({
     userImage : {
        type: String,
        default: "",
+    }, 
+    isAuthor: {
+        type: Boolean,
+        default: false
     }
 },{
     discriminatorKey: userType
