@@ -14,7 +14,8 @@ module.exports.getAllPosts = async (req, res, next) => {
 module.exports.getPostById = async (req, res, next) => {
     const { id } = req.params;
     try {
-        const post = await BlogPost.findById(id).populate('author', 'name');
+        //there's no name field i=for the author's model so how are you able to access a field like name?
+        const post = await Blog.findById(id).populate('author', 'name');
         if (!post) {
             return res.status(404).json({ error: 'Post not found.' });
         }
@@ -29,6 +30,8 @@ module.exports.getPostById = async (req, res, next) => {
 module.exports.createPosts = async (req, res) => {
     const { title, content, author, type } = req.body;
     try {
+        //I think you should check if a post with the same properties as the new one exists 
+        //before creating it so we don't get conflicts as users will read two posts with the exact same content
         const newPost = new Blog({ title, content, author, type });
         await newPost.save();
         res.status(201).json(newPost);

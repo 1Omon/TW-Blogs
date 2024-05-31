@@ -16,6 +16,7 @@ export const createAd = async (req, res) => {
 
 export const getAds = async (req, res) => {
   try {
+    //does the publisher have a name field?
     const ads = await Ads.find().populate('publisher', 'name'); 
     res.status(200).json(ads);
   } catch (error) {
