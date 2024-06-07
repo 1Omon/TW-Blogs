@@ -23,15 +23,16 @@ const UserSchema = new mongoose.Schema({
        type: String,
        default: "",
     }, 
-    isAuthor: {
-        type: Boolean,
-        default: false
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false,
-    },
+    // isAuthor: {
+    //     type: Boolean,
+    //     default: false
+    // },
+    // isAdmin: {
+    //     type: Boolean,
+    //     default: false,
+    // },
 },{
+    timestamps: true,
     discriminatorKey: userType
 })
 
@@ -72,7 +73,13 @@ const AdminSchema = new mongoose.Schema({
     }],
 })
 
+//all models have the fields of the user model
+//all discriminator models have their own private fields too
+
 const User = mongoose.model("User", UserSchema)
+
+//rendering it based on User schema
+//meaning the other fields in the USER SCHEMA will be added to the SCHEMAs below
 const Author = User.discriminator('Author', AuthorSchema)
 const Consumer = User.discriminator('Consumer', ConsumerSchema)
 const Admin = User.discriminator('Admin', AdminSchema)

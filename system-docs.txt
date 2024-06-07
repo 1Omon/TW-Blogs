@@ -100,9 +100,10 @@ Node Package Manager (npmjs.org/packages)
 Folder Structuring
 |--utils 
 |--configuration 
-|--models
-|--controllers 
-|--routes 
+|--stakeholdr
+   |--model
+   |--controller
+   |--route
 |--index.js 
 |--package.json 
 |--package-lock.json 
