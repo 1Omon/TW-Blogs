@@ -1,11 +1,11 @@
-import User from "./model.js"
-import { errorHandler } from '../utils/error.js';
-import bcryptjs from 'bcryptjs';
-import { errorHandler } from '../utils/error.js';
+import {User} from "./model.js"
+// import { errorHandler } from '../utils/error.js';
+// import bcryptjs from 'bcryptjs';
+// import { errorHandler } from '../utils/error.js';
+import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
 
-const bcrypt = require("bcrypt");
-
-module.exports.register = async (req,res,next) => {
+export const register = async (req,res,next) => {
   try {
     const {username, email, password} = req.body;
     const usernameCheck = await User.findOne({ username });
@@ -13,7 +13,7 @@ module.exports.register = async (req,res,next) => {
         return res.json({msg: 'Username already used', status: false});
     const emailCheck = await User.findOne({ email });
     if (emailCheck)
-    return res.json({msg: 'Email already used', status: false});
+    return res.json({msg: 'Email already used', status: false}); 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
     email,
@@ -23,34 +23,43 @@ module.exports.register = async (req,res,next) => {
    delete user.password;
    return res.json({status: true, user });
   } catch (ex){
-    next (ex);
+    // next (ex);
+    console.log(ex)
   }
-};
+}; 
 
-module.exports.login = async (req,res,next) => {
+export const login = async (req,res,next) => {
     try {
       const {username , password} = req.body;
       const user = await User.findOne({ username });
-      if (!user)
-          return res.json({msg: 'Incorrect username or password', status: false});
+      console.log('1')
+      if (!user) return res.json({msg: 'Incorrect username or password', status: false});
       const isPasswordValid = await bcrypt.compare(password, user.password)  
+      console.log('2')
       if(!isPasswordValid)
       return res.json({msg: 'Incorrect username or password', status: false});
-      delete user.password;
-     return res.json({status: true, user });
+      console.log('3')
+      
+      // delete user.password;
+      const token = jwt.sign({id: user._id}, process.env.jwt_secret, {expiresIn: '1d'})
+     return res.json({status: true, user, token });
     } catch (ex){
-      next (ex);
+      // next (ex);
+    console.log(ex)
+
     }
   };
 
-  module.exports.signout = (req, res, next) => {
+  export const signout = (req, res, next) => {
     try {
       res
         .clearCookie('access_token')
         .status(200)
         .json('User has been signed out');
     } catch (error) {
-      next(error);
+      // next(error);
+    console.log(error)
+
     }
   };
 
@@ -60,34 +69,43 @@ export const test = (req, res) => {
   res.json({ message: 'API is working!' });
 };
 
-module.exports.updateUser = async (req, res, next) => {
+export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to update this user'));
+    throw new Error('You are not allowed to update this user')
+    // return next(errorHandler(403, 'You are not allowed to update this user'));
   }
   if (req.body.password) {
     if (req.body.password.length < 6) {
-      return next(errorHandler(400, 'Password must be at least 6 characters'));
-    }
-    req.body.password = bcryptjs.hashSync(req.body.password, 10);
-  }
+      req.body.password = bcrypt.hash(req.body.password, 10);
+     throw new Error('Password must be at least 6 characters')
+
+    //   return next(errorHandler(400, 'Password must be at least 6 characters'));
+    // }
+  }}
   if (req.body.username) {
     if (req.body.username.length < 7 || req.body.username.length > 20) {
-      return next(
-        errorHandler(400, 'Username must be between 7 and 20 characters')
-      );
+      throw new Error('username doesn\'t match format')
+      // return next(
+      //    errorHandler(400, 'Username must be between 7 and 20 characters')
+      // );
     }
     if (req.body.username.includes(' ')) {
-      return next(errorHandler(400, 'Username cannot contain spaces'));
+     throw new Error('username doesn\'t match format')
+
+      // return next(errorHandler(400, 'Username cannot contain spaces'));
     }
     if (req.body.username !== req.body.username.toLowerCase()) {
-      return next(errorHandler(400, 'Username must be lowercase'));
+     throw new Error('username doesn\'t match format')
+
+      // return next(errorHandler(400, 'Username must be lowercase'));
     }
     if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-      return next(
-        errorHandler(400, 'Username can only contain letters and numbers')
-      );
+     throw new Error('username doesn\'t match format')
+      // next(
+      //   errorHandler(400, 'Username can only contain letters and numbers')
+      // );
     }
-  }
+  } 
   try {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
@@ -104,13 +122,14 @@ module.exports.updateUser = async (req, res, next) => {
     const { password, ...rest } = updatedUser._doc;
     res.status(200).json(rest);
   } catch (error) {
-    next(error);
+    // next(error);
+
   }
 };
 
-module.exports.deleteUser = async (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   if (!req.user.isAdmin && req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to delete this user'));
+    // return next(errorHandler(403, 'You are not allowed to delete this user'));
   }
   try {
     await User.findByIdAndDelete(req.params.userId);

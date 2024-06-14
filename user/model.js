@@ -21,8 +21,11 @@ const UserSchema = new mongoose.Schema({
     },
     userImage : {
        type: String,
-       default: "",
     }, 
+    type: {
+        type: String,
+        enum: ["author", "consumer", "admin"]
+    }
     // isAuthor: {
     //     type: Boolean,
     //     default: false
@@ -32,8 +35,8 @@ const UserSchema = new mongoose.Schema({
     //     default: false,
     // },
 },{
-    timestamps: true,
-    discriminatorKey: userType
+    // timestamps: true,
+    discriminatorKey: 'userType'
 })
 
 const AuthorSchema = new mongoose.Schema({

@@ -7,9 +7,9 @@ import multer from "multer";
 import path from "path";
 import { fileURLToPath } from 'url';
 import morgan from 'morgan';
-import helmet from 'helmet';
+import helmet from 'helmet'; 
 import bodyParser from 'body-parser';
-// import user__route from "./user/route.js"
+import userRoute from "./user/routes.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -88,7 +88,7 @@ const upload = multer(
 );
 
 server.use((err, req, res, next) => {
-    console.err('Server Error', err);
+    console.log('Server Error', err);
     res.status(500).json(
         {
             message: 'Internal server error'
@@ -96,7 +96,7 @@ server.use((err, req, res, next) => {
     )
 });
 
-// server.use('/user', user__route);
+server.use('/user', userRoute);
 
 server.all("*", (req, res) => {
     res.status(404).json({
@@ -104,7 +104,7 @@ server.all("*", (req, res) => {
     })
 })
 
-connect(process.env.database_url)
+connect(process.env.database_url) 
 .then (
     () => server.listen(
         process.env.port, 
